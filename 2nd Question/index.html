@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>California Cafe Directory</title>
+    <link rel="stylesheet" href="./css/bootstrap.css" />
+    <link rel="stylesheet" href="./css/styles.css" />
+  </head>
+
+  <body>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12" id="header-wrapper">
+          <div class="container">
+            <div class="row">
+              <div class="col-12" id="header">
+                <h2>California Cafe Directory</h2>
+              </div>
+              <div class="col-12" id="search-wrapper">
+                <input
+                  onkeypress="handle(1)"
+                  type="text"
+                  id="search"
+                  placeholder="Search your favorite cafes!"
+                />
+                <button style="background-color: rgb(22, 164, 230) ; border-radius: 10px; color: aliceblue; padding: 7px; width: 100px;border-color: rgb(32, 36, 36);">Refresh</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="container">
+          <div class="row">
+            <div class="col-12" id="table-wrapper">
+              <table>
+                <thead>
+                  <tr class="table100-head">
+                    <th class="column1">S No</th>
+                    <th class="column2">Cafe Name</th>
+                    <th class="column3">Address</th>
+                    <th class="column4">Postal Code</th>
+                    <th class="column5">Lat</th>
+                    <th class="column6">Long</th>
+                  </tr>
+                </thead>
+                <tbody id="ace"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      alert("Please ignore the Rendering process, just scroll and try to  understand the functionality.");
+      let k = 0;
+
+      const handle = async (st) => {
+        const newArray = [];
+        const { error1, cafes } = await fetch(
+          "https://raw.githubusercontent.com/debojyoti/places-fake-rest-api/master/cafes.json"
+        ).then((data) => {
+          return data.json();
+        });
+        const { error2, places } = await fetch(
+          "https://raw.githubusercontent.com/debojyoti/places-fake-rest-api/master/places.json"
+        ).then((data) => {
+          return data.json();
+        });
+        var SNo = 1;
+        for (let i = 0; i < cafes.length; i++) {
+          var { name, location_id } = cafes[i];
+          for (let j = 0; j < places.length; j++) {
+            if (location_id === places[j].id) {
+              let { street_no, locality, postal_code, lat, long } = places[j];
+              const temp = {
+                SNo,
+                name,
+                street_no,
+                locality,
+                postal_code,
+                lat,
+                long,
+              };
+              newArray.push(temp);
+              SNo = SNo + 1;
+            }
+          }
+        }
+
+        const searchHandle = (string) => {
+          var newa = [];
+          var newArray1 = newArray;
+          while (newArray > 1) {
+            newArray.pop();
+          }
+
+          for (var i = 0; i < newArray1.length; i++) {
+            if (newArray[i].name.includes(string)) {
+              newa.push(newArray[i]);
+            }
+          }
+
+          const data = newa.map((element) => {
+            var { SNo, name, street_no, locality, postal_code, lat, long } =
+              element;
+            locality = street_no + " " + locality;
+
+            var trow = document.createElement("tr");
+
+            var tdata1 = document.createElement("td");
+            tdata1.setAttribute("class", "column1");
+            tdata1.innerText = SNo;
+
+            var tdata2 = document.createElement("td");
+            tdata2.innerText = name;
+            tdata2.setAttribute("class", "column2");
+
+            var tdata4 = document.createElement("td");
+            tdata4.setAttribute("class", "column3");
+            tdata4.innerText = locality;
+
+            var tdata5 = document.createElement("td");
+            tdata5.setAttribute("class", "column4");
+            tdata5.innerText = postal_code;
+
+            var tdata6 = document.createElement("td");
+            tdata6.setAttribute("class", "column5");
+            tdata6.innerText = lat;
+
+            var tdata7 = document.createElement("td");
+            tdata7.setAttribute("class", "column6");
+            tdata7.innerText = long;
+
+            var index = 1;
+            trow.appendChild(tdata1);
+            trow.appendChild(tdata2);
+            // trow.appendChild(tdata3)
+            trow.appendChild(tdata4);
+            trow.appendChild(tdata5);
+            trow.appendChild(tdata6);
+            trow.appendChild(tdata7);
+            document.getElementById("ace").append(trow);
+
+            return trow;
+          });
+        };
+
+        if (st) {
+          var item = document.getElementById("search").value;
+
+          searchHandle(item);
+
+          return;
+        }
+
+        const data = newArray.map((element) => {
+          var { SNo, name, street_no, locality, postal_code, lat, long } =
+            element;
+          locality = street_no + " " + locality;
+
+          var trow = document.createElement("tr");
+
+          var tdata1 = document.createElement("td");
+          tdata1.setAttribute("class", "column1");
+          tdata1.innerText = SNo;
+
+          var tdata2 = document.createElement("td");
+          tdata2.innerText = name;
+          tdata2.setAttribute("class", "column2");
+
+          var tdata4 = document.createElement("td");
+          tdata4.setAttribute("class", "column3");
+          tdata4.innerText = locality;
+
+          var tdata5 = document.createElement("td");
+          tdata5.setAttribute("class", "column4");
+          tdata5.innerText = postal_code;
+
+          var tdata6 = document.createElement("td");
+          tdata6.setAttribute("class", "column5");
+          tdata6.innerText = lat;
+
+          var tdata7 = document.createElement("td");
+          tdata7.setAttribute("class", "column6");
+          tdata7.innerText = long;
+
+          var index = 1;
+          trow.appendChild(tdata1);
+          trow.appendChild(tdata2);
+          // trow.appendChild(tdata3)
+          trow.appendChild(tdata4);
+          trow.appendChild(tdata5);
+          trow.appendChild(tdata6);
+          trow.appendChild(tdata7);
+          document.getElementById("ace").append(trow);
+
+          return trow;
+        });
+      };
+
+      handle();
+    </script>
+  </body>
+</html>
